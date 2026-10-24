@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-allow-services
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  policyTypes: ['Ingress']
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: user-service
+        - podSelector:
+            matchLabels:
+              app: message-service
+      ports:
+        - port: 6379
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: user-service-allow-message-service
+spec:
+  podSelector:
+    matchLabels:
+      app: user-service
+  policyTypes: ['Ingress']
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: message-service
+      ports:
+        - port: 3001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: message-service-allow-http
+spec:
+  podSelector:
+    matchLabels:
+      app: message-service
+  policyTypes: ['Ingress']
+  ingress:
+    - ports:
+        - port: 3000

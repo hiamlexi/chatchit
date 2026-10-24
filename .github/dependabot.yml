@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories: ['/', '/user-service', '/message-service']
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directories: ['/user-service', '/message-service']
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
